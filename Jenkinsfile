@@ -13,8 +13,6 @@ pipeline {
         sh 'npm --version'
       }
     }
-  }
-  stages {
     stage('Cloning Git') {
         steps {
             git 'https://github.com/HBarnabas/forum-project.git'
