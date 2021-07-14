@@ -1,21 +1,35 @@
 pipeline {
+      environment {
+        registry = "hbarnabas/jenkins_test"
+        registryCredential = 'hbar_docker'
+        dockerImage = ''
+    }
     agent any
 
     stages {
-        stage('Build') {
+        stage('Cloning Git') {
             steps {
-                echo 'Building..'
+                git 'https://github.com/HBarnabas/forum-project.git'
             }
         }
-        stage('Test') {
+        stage('Building image') {
             steps {
-                echo 'Testing..'
+                script {
+                  dockerImage = docker.build registry + ":$BUILD_NUMBER"
+                }
             }
         }
-        stage('Deploy') {
+        stage('Deploy image') {
             steps {
-                echo 'Deploying....'
+              docker.withRegistry('', registryCredential) {
+                dockerImage.push()
+              }
             }
+        }
+        stage('Cleaning up') {
+          steps {
+            sh "docker rmi $registry:$BUILD_NUMBER"
+          }
         }
     }
 }
