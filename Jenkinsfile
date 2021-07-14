@@ -8,11 +8,11 @@ pipeline {
   agent any
 
   stages {
-    stage('build') {
+    /*stage('build') {
       steps {
         sh 'npm --version'
       }
-    }
+    }*/
     stage('Cloning Git') {
         steps {
             git 'https://github.com/HBarnabas/forum-project.git'
